@@ -56,6 +56,7 @@ label {
   border: solid black 1px;
   position: relative;
   display: flex;
+  cursor: pointer;
 }
 
 .temp * {
@@ -66,8 +67,6 @@ label {
   font-size: 40px;
 }
 
-
 .hide {
   display: none;
 }
-

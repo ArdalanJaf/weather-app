@@ -41,13 +41,14 @@ map.addControl(
 //   })
 // );
 
-let lat = 0;
-let lng = 0; // put in one block
+// let lat = 0;
+// let lng = 0; // put in one block
+let coords = { lat: 0, lng: 0 };
 const marker = new mapboxgl.Marker();
 const userInput = document.getElementById("userInput");
 const dayCardContainer = document.getElementById("dayCardContainer");
 
-// Get coords from search bar
+// Get coords from search bar input
 userInput.addEventListener("input", (e) => {
   const matchCoords = userInput.value.match(
     /^[ ]*(?:Lat: )?(-?\d+\.?\d*)[, ]+(?:Lng: )?(-?\d+\.?\d*)[ ]*$/i
@@ -59,41 +60,41 @@ userInput.addEventListener("input", (e) => {
       const result = await axios.get(
         `https://api.mapbox.com/geocoding/v5/mapbox.places/${place}.json?access_token=pk.eyJ1IjoiYXJkbzg4IiwiYSI6ImNrenY1eGk4bDFkcXMydm1vdHlheXg5anMifQ.RG_vO4Pl94-BDg-bz9tQmg`
       );
-      lat = result.data.features[0].center[1];
-      lng = result.data.features[0].center[0];
-      getForecast();
+      getForecast(
+        result.data.features[0].center[1],
+        result.data.features[0].center[0]
+      );
     }
   } else {
-    lat = Number(matchCoords[2]);
-    lng = Number(matchCoords[1]);
-    getForecast();
+    getForecast(Number(matchCoords[2]), Number(matchCoords[1]));
   }
 });
 
 // Get coords from map click
 map.on("click", (e) => {
   console.log(`A click event has occurred at ${e.lngLat}`);
-  lat = e.lngLat.lat;
-  lng = e.lngLat.lng;
-  getForecast();
+  getForecast(e.lngLat.lat, e.lngLat.lng);
 });
 
 // Get forecast data from coords
-async function getForecast() {
-  updateCoordsDOM();
+async function getForecast(longitude, latitude) {
+  coordsUpdater(longitude, latitude);
   const result = await axios.get(
-    `http://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lng}&units=metric&appid=1c5f2718ceda5720d2b51266a6fa7283`
+    `http://api.openweathermap.org/data/2.5/onecall?lat=${coords.lat}&lon=${coords.lng}&units=metric&appid=1c5f2718ceda5720d2b51266a6fa7283`
   );
   forecastData = result.data;
+  console.log(forecastData.daily);
   weekForecastCreator(forecastData.daily);
 }
 
-// updates lat/lng on DOM and map marker
-function updateCoordsDOM() {
-  document.getElementById("lat").textContent = lat;
-  document.getElementById("lng").textContent = lng;
-  marker.setLngLat([lng, lat]).addTo(map);
-  map.flyTo({ center: [lng, lat], zoom: 4 });
+// Updates coords and relative DOM
+function coordsUpdater(latitude, longitude) {
+  coords.lat = latitude;
+  coords.lng = longitude;
+  document.getElementById("lat").textContent = coords.lat;
+  document.getElementById("lng").textContent = coords.lng;
+  marker.setLngLat([coords.lng, coords.lat]).addTo(map);
+  map.flyTo({ center: [coords.lng, coords.lat], zoom: 4 });
 }
 
 // create dayCard for each day of week
@@ -168,6 +169,7 @@ function addDayCardInteraction(i) {
     if (e.target.id === `temp${i}`) {
       const dayNightElements =
         e.target.getElementsByClassName("dayNightToggle");
+      console.log(dayNightElements);
       Array.from(dayNightElements).forEach((element) => {
         element.classList.toggle("hide");
       });
