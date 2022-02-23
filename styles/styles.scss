@@ -164,7 +164,7 @@ html {
 
 #map {
   width: 100%;
-  height: 200px;
+  height: 20rem;
 }
 
 .mapboxgl-ctrl-bottom-left,
@@ -174,7 +174,7 @@ html {
 
 p,
 label {
-  font-size: 16px;
+  font-size: 1.6rem;
 }
 
 .container {
@@ -184,6 +184,12 @@ label {
 }
 
 h1 {
+  font-size: 4rem;
+  line-height: 1;
+  margin: 2rem auto;
+  width: fit-content;
+  border-bottom: solid 1px $secondary;
+  // display: block;
 }
 
 /* DAY CARD */

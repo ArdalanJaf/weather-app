@@ -1,3 +1,5 @@
+import { getDayName, capEachLetter } from "./util.js";
+
 // Map
 mapboxgl.accessToken =
   "pk.eyJ1IjoiYXJkbzg4IiwiYSI6ImNrenY1eGk4bDFkcXMydm1vdHlheXg5anMifQ.RG_vO4Pl94-BDg-bz9tQmg";
@@ -36,6 +38,7 @@ userInput.addEventListener("input", (e) => {
       const result = await axios.get(
         `https://api.mapbox.com/geocoding/v5/mapbox.places/${place}.json?access_token=pk.eyJ1IjoiYXJkbzg4IiwiYSI6ImNrenY1eGk4bDFkcXMydm1vdHlheXg5anMifQ.RG_vO4Pl94-BDg-bz9tQmg`
       );
+      //NEED TO ADD ERROR STATEMENT? IF PLACE IS NOT RECOGNISABLE
       getForecast(
         result.data.features[0].center[1],
         result.data.features[0].center[0]
@@ -58,7 +61,8 @@ async function getForecast(longitude, latitude) {
   const result = await axios.get(
     `http://api.openweathermap.org/data/2.5/onecall?lat=${coords.lat}&lon=${coords.lng}&units=metric&appid=1c5f2718ceda5720d2b51266a6fa7283`
   );
-  forecastData = result.data;
+  //NEED TO ADD ERROR STATEMENT? IF API IS DOWN FOR WHATEVER REASON
+  let forecastData = result.data;
   // console.log(forecastData.daily);
   weekForecastCreator(forecastData.daily);
 }
@@ -114,28 +118,28 @@ function dayCardHTML(dataObj, i) {
           </div>`;
 }
 
-// converts unix time to day of week
-function getDayName(dataObj) {
-  let unixDate = new Date(dataObj.dt * 1000);
-  let dayNames = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-  ];
-  return dayNames[unixDate.getDay()].toUpperCase();
-}
+// // converts unix time to day of week
+// function getDayName(dataObj) {
+//   let unixDate = new Date(dataObj.dt * 1000);
+//   let dayNames = [
+//     "Sunday",
+//     "Monday",
+//     "Tuesday",
+//     "Wednesday",
+//     "Thursday",
+//     "Friday",
+//     "Saturday",
+//   ];
+//   return dayNames[unixDate.getDay()].toUpperCase();
+// }
 
-function capEachLetter(string) {
-  const words = string.split(" ");
-  words.forEach((word, i) => {
-    words[i] = word.charAt(0).toUpperCase() + word.slice(1);
-  });
-  return words.join(" ");
-}
+// function capEachLetter(string) {
+//   const words = string.split(" ");
+//   words.forEach((word, i) => {
+//     words[i] = word.charAt(0).toUpperCase() + word.slice(1);
+//   });
+//   return words.join(" ");
+// }
 
 // DAY CARD INTERACTION
 
