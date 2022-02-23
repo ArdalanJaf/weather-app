@@ -1,17 +1,3 @@
-// Create a JS based web site that allows the user to see weather in a given location
-//  Just like here - https://practical-mcnulty-b8423f.netlify.app/
-// This is the more simple api - https://openweathermap.org/api/hourly-forecast
-// This is the more complex with more features - https://openweathermap.org/api/one-call-api
-// You can let the user enter a location or use the geolocation api, if time permits offer both!
-// Tips:
-// Create a key at least 4 hours before you begin
-// Start by just getting data into the console
-// Then insert some data into the DOM
-// Then insert all the data into the DOM
-// Then add css classes to make it look nice
-// Then solve adding the images
-// This will take classwork into the end of next week!
-
 // Map
 mapboxgl.accessToken =
   "pk.eyJ1IjoiYXJkbzg4IiwiYSI6ImNrenY1eGk4bDFkcXMydm1vdHlheXg5anMifQ.RG_vO4Pl94-BDg-bz9tQmg";
@@ -32,18 +18,8 @@ map.addControl(
   })
 );
 
-// adds search bar functionality
-// map.addControl(
-//   new MapboxGeocoder({
-//     accessToken: mapboxgl.accessToken,
-//     mapboxgl: mapboxgl,
-//     // localGeocoder: coordinatesGeocoder,
-//   })
-// );
-
-// let lat = 0;
-// let lng = 0; // put in one block
-let coords = { lat: 0, lng: 0 };
+// global variables
+const coords = { lat: 0, lng: 0 };
 const marker = new mapboxgl.Marker();
 const userInput = document.getElementById("userInput");
 const dayCardContainer = document.getElementById("dayCardContainer");
@@ -83,7 +59,7 @@ async function getForecast(longitude, latitude) {
     `http://api.openweathermap.org/data/2.5/onecall?lat=${coords.lat}&lon=${coords.lng}&units=metric&appid=1c5f2718ceda5720d2b51266a6fa7283`
   );
   forecastData = result.data;
-  console.log(forecastData.daily);
+  // console.log(forecastData.daily);
   weekForecastCreator(forecastData.daily);
 }
 
@@ -169,7 +145,6 @@ function addDayCardInteraction(i) {
     if (e.target.id === `temp${i}`) {
       const dayNightElements =
         e.target.getElementsByClassName("dayNightToggle");
-      console.log(dayNightElements);
       Array.from(dayNightElements).forEach((element) => {
         element.classList.toggle("hide");
       });
