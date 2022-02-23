@@ -117,12 +117,12 @@ function dayCardHTML(dataObj, i) {
   return `<div class="dayCard" id="dayCard${i}">
               <h2 class="date">${getDayName(dataObj)}</h2>
               <div class="temp" id="temp${i}">
-                <p class="temp__actual temp__actual--day" id="temp__actual--day${i}">${dataObj.temp.day.toFixed()}&#8451</p>
-                <p class="temp__actual temp__actual--night hide" id="temp__actual--night${i}">${dataObj.temp.night.toFixed()}&#8451</p>
+                <p class="temp__actual dayNightToggle" id="temp__actual--day${i}">${dataObj.temp.day.toFixed()}&#8451</p>
+                <p class="temp__actual dayNightToggle hide" id="temp__actual--night${i}">${dataObj.temp.night.toFixed()}&#8451</p>
                 <div class="temp__feelContainer">
                   <p class="temp__feelLabel">Feels like: <br>
-                    <spam class="temp__feel--day" id="temp__feel--day${i}">${dataObj.feels_like.day.toFixed()}&#8451</spam>
-                    <spam class="temp__feel--night hide" id="temp__feel--night${i}">${dataObj.feels_like.night.toFixed()}&#8451</spam>
+                    <spam class="temp__feel dayNightToggle" id="temp__feel--day${i}">${dataObj.feels_like.day.toFixed()}&#8451</spam>
+                    <spam class="temp__feel dayNightToggle hide" id="temp__feel--night${i}">${dataObj.feels_like.night.toFixed()}&#8451</spam>
                   </p>
                 </div>
               </div>
@@ -166,14 +166,19 @@ function addDayCardInteraction(i) {
   dayCardContainer.addEventListener("click", (e) => {
     // day/night temp toggle
     if (e.target.id === `temp${i}`) {
-      document.getElementById(`temp__actual--day${i}`).classList.toggle("hide");
-      document
-        .getElementById(`temp__actual--night${i}`)
-        .classList.toggle("hide");
-      document.getElementById(`temp__feel--day${i}`).classList.toggle("hide");
-      document.getElementById(`temp__feel--night${i}`).classList.toggle("hide");
+      const dayNightElements =
+        e.target.getElementsByClassName("dayNightToggle");
+      Array.from(dayNightElements).forEach((element) => {
+        element.classList.toggle("hide");
+      });
+      // WHILST RUSSEL SAID USING IDs IS BEST, THE ABOVE SEEMS LIKE A MORE ELEGANT SOLUTION TO THIS PARTICULAR TASK
+
+      // document.getElementById(`temp__actual--day${i}`).classList.toggle("hide");
+      // document
+      //   .getElementById(`temp__actual--night${i}`)
+      //   .classList.toggle("hide");
+      // document.getElementById(`temp__feel--day${i}`).classList.toggle("hide");
+      // document.getElementById(`temp__feel--night${i}`).classList.toggle("hide");
     }
   });
 }
-
-// GIT TEST
