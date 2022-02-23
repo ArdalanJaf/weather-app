@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./mapbox-gl_API/mapbox-gl.js"></script>
+    <link rel="stylesheet" href="./mapbox-gl_API/mapbox-gl.css" />
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css"
+      type="text/css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script defer src="./weather.js"></script>
+    <!--If i make this "type="module" it cashes my program :S-->
+    <link rel="stylesheet" href="./styles/normalize.css" />
+    <link rel="stylesheet" href="./styles/styles.css" />
+    <title>4Days</title>
+  </head>
+  <body>
+    <div class="container wApp">
+      <h1>RainyDayz</h1>
+      <label for="userInput"
+        >Click on map or enter location(place or co-ordinates):</label
+      >
+      <input type="text" id="userInput" />
+      <div id="map"></div>
+      <div>
+        <p>Longitude: <spam id="lng"></spam></p>
+        <p>Latitude: <spam id="lat"></spam></p>
+      </div>
+      <div id="dayCardContainer"></div>
+    </div>
+  </body>
+</html>
