@@ -1,4 +1,5 @@
 import { getDayName, capEachLetter } from "./util.js";
+import { iconSelector } from "./iconSelector.js";
 
 // Map
 mapboxgl.accessToken =
@@ -67,7 +68,7 @@ async function getForecast(longitude, latitude) {
     );
     //NEED TO ADD ERROR STATEMENT? IF API IS DOWN FOR WHATEVER REASON
     let forecastData = result.data;
-    // console.log(forecastData.daily);
+    console.log(forecastData.daily);
     weekForecastCreator(forecastData.daily);
   } catch (error) {
     alert("API down");
@@ -105,25 +106,39 @@ function dayUpdateDom(dataObj, i) {
 function dayCardHTML(dataObj, i) {
   return `<div class="dayCard" id="dayCard${i}">
               <h2 class="date">${getDayName(dataObj)}</h2>
+              
               <div class="dayStatsContainer">
-                <div class="temp" id="temp${i}">
+                <div class="tempBox statHolder" id="temp${i}">
+                  <img class="temp__icon dayNightToggle" src="../assets/day.svg" />
+                  <img class="temp__icon dayNightToggle hide" src="../assets/night.svg" />
                   <p class="temp__actual dayNightToggle" id="temp__actual--day${i}">${dataObj.temp.day.toFixed()}&#8451</p>
                   <p class="temp__actual dayNightToggle hide" id="temp__actual--night${i}">${dataObj.temp.night.toFixed()}&#8451</p>
-                  <p class="temp__feelLabel">Feels like:<br>
+                  <p class="temp__feelLabel">Feels:<br>
                     <spam class="temp__feel dayNightToggle" id="temp__feel--day${i}">${dataObj.feels_like.day.toFixed()}&#8451</spam>
                     <spam class="temp__feel dayNightToggle hide" id="temp__feel--night${i}">${dataObj.feels_like.night.toFixed()}&#8451</spam>
                   </p>
                 </div>
-                <p class="humidity">Humidity:<br><spam>${
-                  dataObj.humidity
-                }%</spam></p>
-                <p class="windSpeed">Wind:<br><spam>${dataObj.wind_speed.toFixed()} mph</spam></p>
+
+                <div class="humidBox statHolder">
+                  <img class="wh_icon" src="../assets/raindrop.svg" />
+                  <p class="humidity">${dataObj.humidity}%</p>
+                </div>
+                <div class="windBox statHolder">
+                  <img class="wh_icon" src="../assets/windsock.svg" />
+                  <p class="windSpeed">${dataObj.wind_speed.toFixed()} mph</p>
+                </div>
+
               </div>
-              <h3 class="description">${capEachLetter(
-                dataObj.weather[0].description
-              )}</h3> 
-             
- 
+
+               
+                <img class="weatherIcon" src="../assets/weather_icons/${iconSelector(
+                  dataObj.weather[0].main,
+                  dataObj.weather[0].description
+                )}.svg"/>
+                <h3 class="description">${capEachLetter(
+                  dataObj.weather[0].description
+                )}</h3> 
+
           </div>`;
 }
 

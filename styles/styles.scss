@@ -163,7 +163,7 @@ html {
 /* MAPBOX-GL STYLES OVERRIDE */
 
 #map {
-  width: 100%;
+  // width: 100%;
   height: 20rem;
 }
 
@@ -203,7 +203,7 @@ h1 {
 }
 
 .dayCard {
-  background-color: #d7c26d;
+  background-color: #1a1a1a;
   border-radius: 1rem;
   /*   padding: 0 1rem 1rem; */
   color: white;
@@ -215,8 +215,14 @@ h2 {
   text-align: center;
 }
 
+.weatherIcon {
+  display: block;
+  width: 200px;
+  margin: -1rem auto;
+}
+
 h3 {
-  font-size: 4rem;
+  font-size: 3rem;
   font-weight: 300;
   text-align: center;
 }
@@ -224,38 +230,73 @@ h3 {
 .dayStatsContainer {
   display: flex;
   /*   flex-direction: column; */
-  width: 100%;
+  width: 25rem;
+  margin: auto;
   align-items: center;
   justify-content: space-around;
+  flex-wrap: wrap;
   /*     border: solid white 1px; */
 }
 
-.temp {
-  /*   border: solid black 1px; */
-  position: relative;
+.statHolder {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-  /*           justify-content: end; */
-  width: 18rem;
-  /*   flex-direction: column; */
-
-  cursor: pointer;
+  // &:nth-of-type(2) {
+  //   order: -1;
+  // }
+  // AT 400+
   width: content-fit;
 }
 
-.temp * {
-  pointer-events: none;
+.tempBox {
+  cursor: pointer;
+  margin-right: 8px;
+  & * {
+    pointer-events: none;
+  }
+}
+
+.temp__icon {
+  width: 4rem;
+  margin-top: -1rem;
 }
 
 .temp__actual {
-  font-size: 40px;
+  font-size: 4rem;
   margin-right: 10px;
+}
+
+// .windHumidity {
+//   display: flex;
+//   div {
+//     display: flex;
+//     align-items: center;
+//     &:nth-of-type(1) {
+//       margin-right: 10px;
+//     }
+//   }
+// }
+
+.humidBox {
+  margin-right: -10px;
+}
+
+.humidity,
+.windSpeed {
+  font-size: 2rem;
+}
+
+.wh_icon {
+  width: 60px;
+  margin-right: -10px;
 }
 
 .hide {
   display: none;
 }
+
+@media;
