@@ -176,10 +176,10 @@ label {
 h1 {
   font-size: 4rem;
   line-height: 1;
-  margin: 2rem auto;
-  width: -webkit-fit-content;
-  width: -moz-fit-content;
-  width: fit-content;
+  margin: 0 auto;
+  text-align: center;
+  width: 100%;
+  padding: 2rem 0;
   border-bottom: solid 1px #000;
 }
 
@@ -191,18 +191,52 @@ h1 {
 }
 
 .dayCard {
-  background-color: #ffe26b;
-  border-radius: 10px;
-  padding: 20px;
+  background-color: #d7c26d;
+  border-radius: 1rem;
+  /*   padding: 0 1rem 1rem; */
+  color: white;
+}
+
+h2 {
+  font-size: 3rem;
+  padding: 2rem 0;
+  text-align: center;
+}
+
+h3 {
+  font-size: 4rem;
+  font-weight: 300;
+  text-align: center;
+}
+
+.dayStatsContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  /*   flex-direction: column; */
+  width: 100%;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  /*     border: solid white 1px; */
 }
 
 .temp {
-  border: solid black 1px;
+  /*   border: solid black 1px; */
   position: relative;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  /*           justify-content: end; */
+  width: 18rem;
+  /*   flex-direction: column; */
   cursor: pointer;
+  width: content-fit;
 }
 
 .temp * {
@@ -211,6 +245,7 @@ h1 {
 
 .temp__actual {
   font-size: 40px;
+  margin-right: 10px;
 }
 
 .hide {

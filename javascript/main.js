@@ -9,7 +9,6 @@ const map = new mapboxgl.Map({
   center: [10, 10], // starting position [lng, lat]
   zoom: 1, // starting zoom
 });
-
 // adds map controls
 map.addControl(new mapboxgl.NavigationControl());
 
@@ -26,45 +25,54 @@ const marker = new mapboxgl.Marker();
 const userInput = document.getElementById("userInput");
 const dayCardContainer = document.getElementById("dayCardContainer");
 
-// Get coords from search bar input
-userInput.addEventListener("input", (e) => {
-  const matchCoords = userInput.value.match(
-    /^[ ]*(?:Lat: )?(-?\d+\.?\d*)[, ]+(?:Lng: )?(-?\d+\.?\d*)[ ]*$/i
-  );
-
-  if (!matchCoords) {
-    getCoords(userInput.value);
-    async function getCoords(place) {
-      const result = await axios.get(
-        `https://api.mapbox.com/geocoding/v5/mapbox.places/${place}.json?access_token=pk.eyJ1IjoiYXJkbzg4IiwiYSI6ImNrenY1eGk4bDFkcXMydm1vdHlheXg5anMifQ.RG_vO4Pl94-BDg-bz9tQmg`
-      );
-      //NEED TO ADD ERROR STATEMENT? IF PLACE IS NOT RECOGNISABLE
-      getForecast(
-        result.data.features[0].center[1],
-        result.data.features[0].center[0]
-      );
-    }
-  } else {
-    getForecast(Number(matchCoords[2]), Number(matchCoords[1]));
-  }
-});
-
-// Get coords from map click
+// Listener: get coords from map click
 map.on("click", (e) => {
   console.log(`A click event has occurred at ${e.lngLat}`);
   getForecast(e.lngLat.lat, e.lngLat.lng);
 });
 
+// Listener: get coords from search bar input
+userInput.addEventListener("input", (e) => {
+  const matchCoords = userInput.value.match(
+    /^[ ]*(?:Lat: )?(-?\d+\.?\d*)[, ]+(?:Lng: )?(-?\d+\.?\d*)[ ]*$/i
+  );
+  if (!matchCoords) {
+    getCoordsFromPlace(userInput.value);
+  } else {
+    getForecast(Number(matchCoords[2]), Number(matchCoords[1]));
+  }
+});
+
+// uses API to convert place name to coords
+async function getCoordsFromPlace(place) {
+  try {
+    const result = await axios.get(
+      `https://api.mapbox.com/geocoding/v5/mapbox.places/${place}.json?access_token=pk.eyJ1IjoiYXJkbzg4IiwiYSI6ImNrenY1eGk4bDFkcXMydm1vdHlheXg5anMifQ.RG_vO4Pl94-BDg-bz9tQmg`
+    );
+    getForecast(
+      result.data.features[0].center[1],
+      result.data.features[0].center[0]
+    );
+  } catch (error) {
+    alert("Cannot get coords from searched place name, API down");
+  }
+}
+
 // Get forecast data from coords
 async function getForecast(longitude, latitude) {
   coordsUpdater(longitude, latitude);
-  const result = await axios.get(
-    `http://api.openweathermap.org/data/2.5/onecall?lat=${coords.lat}&lon=${coords.lng}&units=metric&appid=1c5f2718ceda5720d2b51266a6fa7283`
-  );
-  //NEED TO ADD ERROR STATEMENT? IF API IS DOWN FOR WHATEVER REASON
-  let forecastData = result.data;
-  // console.log(forecastData.daily);
-  weekForecastCreator(forecastData.daily);
+  try {
+    const result = await axios.get(
+      `http://api.openweathermap.org/data/2.5/onecall?lat=${coords.lat}&lon=${coords.lng}&units=metric&appid=1c5f2718ceda5720d2b51266a6fa7283`
+    );
+    //NEED TO ADD ERROR STATEMENT? IF API IS DOWN FOR WHATEVER REASON
+    let forecastData = result.data;
+    // console.log(forecastData.daily);
+    weekForecastCreator(forecastData.daily);
+  } catch (error) {
+    alert("API down");
+    console.log(error);
+  }
 }
 
 // Updates coords and relative DOM
@@ -97,49 +105,27 @@ function dayUpdateDom(dataObj, i) {
 function dayCardHTML(dataObj, i) {
   return `<div class="dayCard" id="dayCard${i}">
               <h2 class="date">${getDayName(dataObj)}</h2>
-              <div class="temp" id="temp${i}">
-                <p class="temp__actual dayNightToggle" id="temp__actual--day${i}">${dataObj.temp.day.toFixed()}&#8451</p>
-                <p class="temp__actual dayNightToggle hide" id="temp__actual--night${i}">${dataObj.temp.night.toFixed()}&#8451</p>
-                <div class="temp__feelContainer">
-                  <p class="temp__feelLabel">Feels like: <br>
+              <div class="dayStatsContainer">
+                <div class="temp" id="temp${i}">
+                  <p class="temp__actual dayNightToggle" id="temp__actual--day${i}">${dataObj.temp.day.toFixed()}&#8451</p>
+                  <p class="temp__actual dayNightToggle hide" id="temp__actual--night${i}">${dataObj.temp.night.toFixed()}&#8451</p>
+                  <p class="temp__feelLabel">Feels like:<br>
                     <spam class="temp__feel dayNightToggle" id="temp__feel--day${i}">${dataObj.feels_like.day.toFixed()}&#8451</spam>
                     <spam class="temp__feel dayNightToggle hide" id="temp__feel--night${i}">${dataObj.feels_like.night.toFixed()}&#8451</spam>
                   </p>
                 </div>
+                <p class="humidity">Humidity:<br><spam>${
+                  dataObj.humidity
+                }%</spam></p>
+                <p class="windSpeed">Wind:<br><spam>${dataObj.wind_speed.toFixed()} mph</spam></p>
               </div>
               <h3 class="description">${capEachLetter(
                 dataObj.weather[0].description
               )}</h3> 
-              <p class="humidity">Humidity: <spam>${
-                dataObj.humidity
-              }%</spam></p>
-              <p class="windSpeed">Wind-speed: <spam>${dataObj.wind_speed.toFixed()} mph</spam></p>
+             
  
           </div>`;
 }
-
-// // converts unix time to day of week
-// function getDayName(dataObj) {
-//   let unixDate = new Date(dataObj.dt * 1000);
-//   let dayNames = [
-//     "Sunday",
-//     "Monday",
-//     "Tuesday",
-//     "Wednesday",
-//     "Thursday",
-//     "Friday",
-//     "Saturday",
-//   ];
-//   return dayNames[unixDate.getDay()].toUpperCase();
-// }
-
-// function capEachLetter(string) {
-//   const words = string.split(" ");
-//   words.forEach((word, i) => {
-//     words[i] = word.charAt(0).toUpperCase() + word.slice(1);
-//   });
-//   return words.join(" ");
-// }
 
 // DAY CARD INTERACTION
 
@@ -152,14 +138,6 @@ function addDayCardInteraction(i) {
       Array.from(dayNightElements).forEach((element) => {
         element.classList.toggle("hide");
       });
-      // WHILST RUSSEL SAID USING IDs IS BEST, THE ABOVE SEEMS LIKE A MORE ELEGANT SOLUTION TO THIS PARTICULAR TASK
-
-      // document.getElementById(`temp__actual--day${i}`).classList.toggle("hide");
-      // document
-      //   .getElementById(`temp__actual--night${i}`)
-      //   .classList.toggle("hide");
-      // document.getElementById(`temp__feel--day${i}`).classList.toggle("hide");
-      // document.getElementById(`temp__feel--night${i}`).classList.toggle("hide");
     }
   });
 }
