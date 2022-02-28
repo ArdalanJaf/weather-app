@@ -14,22 +14,21 @@
     />
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script type="module" src="./javascript/main.js"></script>
-    <!--If i make this "type="module" it cashes my program :S-->
     <link rel="stylesheet" href="./styles/normalize.css" />
     <link rel="stylesheet" href="./styles/styles.css" />
-    <title>4Days</title>
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.png" />
+    <title>Weather App</title>
   </head>
   <body>
-    <div class="container wApp">
-      <h1>GLOBALCAST</h1>
-      <label for="userInput"
-        >Click on map or enter location(place or co-ordinates):</label
-      >
-      <input type="text" id="userInput" />
-      <div id="map"></div>
-      <div>
-        <p>Longitude: <spam id="lng"></spam></p>
-        <p>Latitude: <spam id="lat"></spam></p>
+    <div class="container">
+      <h1>WEATHER APP</h1>
+      <div class="mapContainer">
+        <input
+          type="text"
+          id="userInput"
+          placeholder="Enter place, co-ordinates or click on map"
+        />
+        <div id="map"></div>
       </div>
       <div id="dayCardContainer"></div>
     </div>
