@@ -55,14 +55,12 @@ async function getForecast(longitude, latitude) {
   coordsUpdater(longitude, latitude);
   try {
     const result = await axios.get(
-      `http://api.openweathermap.org/data/2.5/onecall?lat=${coords.lat}&lon=${coords.lng}&units=metric&appid=1c5f2718ceda5720d2b51266a6fa7283`
+      `https://api.openweathermap.org/data/2.5/onecall?lat=${coords.lat}&lon=${coords.lng}&units=metric&appid=1c5f2718ceda5720d2b51266a6fa7283`
     );
-    //NEED TO ADD ERROR STATEMENT? IF API IS DOWN FOR WHATEVER REASON
     let forecastData = result.data;
-    console.log(forecastData.daily);
     weekForecastCreator(forecastData.daily);
   } catch (error) {
-    alert("API down");
+    alert("API site is down, please try later.");
     console.log(error);
   }
 }
