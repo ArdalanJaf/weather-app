@@ -141,9 +141,9 @@
     U+FEFF, U+FFFD;
 }
 
-$primary: #fff;
-$secondary: #191a1a;
-$background: #575757;
+$primary: #ffffff;
+$secondary: #189fd8;
+$background: #121f36;
 
 /* GENERAL */
 html {
@@ -152,6 +152,7 @@ html {
   font-family: "Quicksand", sans-serif;
   background-color: $background;
   min-height: 100vh;
+  padding: 0 5%;
 }
 
 *,
@@ -188,7 +189,7 @@ h1 {
 
 .mapContainer {
   width: 100%;
-  height: 40rem;
+  height: 30rem;
   position: relative;
   margin-bottom: 1rem;
 }
@@ -200,10 +201,10 @@ h1 {
   transform: translateX(-50%);
   z-index: 1;
   border-radius: 8px;
-  width: calc(100% - 10px);
+  width: calc(50% - 10px);
   line-height: 2;
   font-size: 1.6rem;
-  opacity: 0.5;
+  opacity: 0.8;
   padding: 0 5px;
   font-weight: 500;
 
@@ -352,6 +353,9 @@ h3 {
 @media (min-width: 800px) {
   .dayCard {
     width: Calc(Calc(100% - 2%) / 3);
+  }
+  .mapContainer {
+    height: 40rem;
   }
 }
 

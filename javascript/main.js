@@ -1,12 +1,13 @@
 import { getDayName, capEachLetter } from "./util.js";
 import { iconSelector } from "./iconSelector.js";
+// import { dayCardHTML } from "./dayCardHTML.js";
 
 // Map API
 mapboxgl.accessToken =
   "pk.eyJ1IjoiYXJkbzg4IiwiYSI6ImNrenY1eGk4bDFkcXMydm1vdHlheXg5anMifQ.RG_vO4Pl94-BDg-bz9tQmg";
 const map = new mapboxgl.Map({
   container: "map", // container ID
-  style: "mapbox://styles/mapbox/dark-v10", // style URL
+  style: "mapbox://styles/mapbox/outdoors-v11", // style URL
   center: [0, 30], // starting position [lng, lat]
   zoom: 1, // starting zoom
 });
@@ -23,13 +24,14 @@ map.on("click", (e) => {
   getForecast(e.lngLat.lat, e.lngLat.lng);
 });
 
-// Listener: get coords from search bar input
+// Listener: checks if user inputs co-ords or place name. If the latter, get's co-ords from place name.
 userInput.addEventListener("input", (e) => {
   const matchCoords = userInput.value.match(
     /^[ ]*(?:Lat: )?(-?\d+\.?\d*)[, ]+(?:Lng: )?(-?\d+\.?\d*)[ ]*$/i
   );
   if (!matchCoords) {
     getCoordsFromPlace(userInput.value);
+    //PROBLEM: if co-ordinates entered incorrectly, program will assume its a place and try to find co-ords, and tell user to try co-ordinates instead.
   } else {
     getForecast(Number(matchCoords[2]), Number(matchCoords[1]));
   }
@@ -46,7 +48,14 @@ async function getCoordsFromPlace(place) {
       result.data.features[0].center[0]
     );
   } catch (error) {
-    alert("Cannot get coords from searched place name, API down");
+    if (error.response.status == "404") {
+      alert(
+        "Co-ordinate-finder server not responding. Enter co-ordinates or try again later."
+      );
+    } else {
+      alert("Error: " + error);
+    }
+    console.log("Error: ", error, error.response);
   }
 }
 
@@ -60,8 +69,20 @@ async function getForecast(longitude, latitude) {
     let forecastData = result.data;
     weekForecastCreator(forecastData.daily);
   } catch (error) {
-    alert("API site is down, please try later.");
-    console.log(error);
+    if (error.response.status == "400") {
+      alert(
+        "Co-ordinates entered are not viable. Error: " +
+          error.response.statusText
+      );
+    } else if (error.response) {
+      alert(
+        "Weather-data server not responding, try again later. Error: " +
+          error.response.statusText
+      );
+    } else {
+      alert("Error: " + error);
+    }
+    console.log("Error: ", error, error.response);
   }
 }
 
@@ -78,7 +99,7 @@ function weekForecastCreator(dataObj) {
   // delete previous dayCards
   dayCardContainer.innerHTML = "";
 
-  for (let i = 0; i < 8; i++) {
+  for (let i = 0; i < 6; i++) {
     dayUpdateDom(dataObj[i], i);
     addDayCardInteraction(i);
   }
@@ -119,7 +140,7 @@ function dayCardHTML(dataObj, i) {
             )}.svg"/>
             <h3 class="description">${capEachLetter(
               dataObj.weather[0].description
-            )}</h3> 
+            )}</h3>
            </div>`;
 }
 
