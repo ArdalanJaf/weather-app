@@ -1,6 +1,6 @@
 # Global-Forecaster
 
-Provides weather forecast for anywhere in the world, using Axios to communicate to two APIs (openMapGL and open-weather-map).
+This [site](https://ardalan-weather-app.netlify.app/) provides weather forecast for anywhere in the world, using Axios to communicate to two APIs (openMapGL and open-weather-map). Built to practice use of APIs.
 
 ## Software
 
