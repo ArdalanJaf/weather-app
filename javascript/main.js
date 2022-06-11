@@ -99,7 +99,7 @@ function weekForecastCreator(dataObj) {
   // delete previous dayCards
   dayCardContainer.innerHTML = "";
 
-  for (let i = 0; i < 6; i++) {
+  for (let i = 0; i < 8; i++) {
     dayUpdateDom(dataObj[i], i);
     addDayCardInteraction(i);
   }
